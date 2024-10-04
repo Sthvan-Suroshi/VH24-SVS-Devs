@@ -1,3 +1,4 @@
+component
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Routes, Route } from 'react-router-dom';
@@ -13,6 +14,13 @@ import Inslanding from './components/InstituteLandingPage';
 
 
 
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+main
+
+import Home from "./components/Home";
+import Registration from "./pages/RegistrationForm";
+import LoginComponent from "./components/Login";
 
 function App() {
   return (
@@ -20,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Registration />} />
+component
         <Route path="/institution" element={<Institution />} />
         <Route path="/shopkeeper" element={<Shopkeeper />} />
         <Route path="/donor" element={<Donor />} />
@@ -33,10 +42,11 @@ function App() {
 
 
         
+
+        <Route path="/login" element={<LoginComponent />} />
+main
       </Routes>
     </>
-
-    
   );
 }
 

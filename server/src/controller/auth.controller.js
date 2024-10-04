@@ -80,9 +80,13 @@ export const donorSignup = asyncHandler(async (req, res) => {
     address,
   });
 
+  if (!user) {
+    throw new ApiError(400, "Failed to create donor");
+  }
+
   return res
     .status(201)
-    .json(new ApiResponse(201, "Donor created successfully", user));
+    .json(new ApiResponse(201, "Donor created successfully"));
 });
 
 export const shopkeeperSignup = asyncHandler(async (req, res) => {
