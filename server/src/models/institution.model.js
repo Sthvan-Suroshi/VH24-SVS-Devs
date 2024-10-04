@@ -84,7 +84,9 @@ const InstitutionSchema = new mongoose.Schema(
 );
 
 // Method to reduce monetary requirements
-InstitutionSchema.methods.reduceMonetaryRequirements = function (donationAmount) {
+InstitutionSchema.methods.reduceMonetaryRequirements = function (
+  donationAmount,
+) {
   if (this.requirements.remainingAmount >= donationAmount) {
     this.requirements.remainingAmount -= donationAmount;
   } else {
@@ -93,8 +95,13 @@ InstitutionSchema.methods.reduceMonetaryRequirements = function (donationAmount)
 };
 
 // Method to reduce food item requirements
-InstitutionSchema.methods.reduceFoodItemRequirements = function (itemName, quantity) {
-  const foodItem = this.requirements.foodItems.find(item => item.itemName === itemName);
+InstitutionSchema.methods.reduceFoodItemRequirements = function (
+  itemName,
+  quantity,
+) {
+  const foodItem = this.requirements.foodItems.find(
+    (item) => item.itemName === itemName,
+  );
   if (foodItem) {
     if (foodItem.remainingQuantity >= quantity) {
       foodItem.remainingQuantity -= quantity;
