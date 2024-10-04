@@ -1,63 +1,71 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { Institution } from '../models/institution.model.js';
+import { Institution } from "../models/institution.model.js";
+import { Requirement } from "../models/requirements.models.js";
 
+export const createDonationRequest = asyncHandler(async (req, res) => {
+  const { donationType, totalAmount, foodItems } = req.body;
 
-export const instituteRequest = asyncHandler(async (req, res) => {
-    // const institutionId = req.user._id; // Assuming the institution is authenticated
-    // console.log(institutionId);
-    const { totalAmount, remainingAmount, foodItems,institutionId } = req.body;
+  // Find the institution making the request
+  const institutionId = req.user?._id;
+  console.log(req.user?._id);
 
-    if (!totalAmount && !foodItems) {
-        throw new ApiError(400,'Requirements must include totalAmount or foodItems.');
+  const institution = await Institution.findById(institutionId);
+  if (!institution) {
+    return new ApiError(404, "Institution not found");
+  }
+
+  // Check if donationType is valid
+  if (!["food", "money", "both"].includes(donationType)) {
+    return new ApiError(400, "Invalid donation type");
+  }
+
+  // Prepare the requirement fields based on donation type
+  const requirementData = {
+    institutionId,
+    donationType,
+  };
+
+  // If the request involves money, add totalAmount and remainingAmount
+  if (donationType === "money" || donationType === "both") {
+    if (!totalAmount || totalAmount <= 0) {
+      return new ApiError(400, "Total amount must be greater than 0");
+    }
+    requirementData.totalAmount = totalAmount;
+    requirementData.remainingAmount = totalAmount; // Initially the remaining is equal to total
+  }
+
+  // If the request involves food, add foodItems and their required quantities
+  if (donationType === "food" || donationType === "both") {
+    if (!foodItems || !Array.isArray(foodItems) || foodItems.length === 0) {
+      return new ApiError(400, "Please provide food items");
     }
 
-    const institution = await Institution.findById(institutionId);
+    const formattedFoodItems = foodItems.map((item) => ({
+      itemName: item.itemName,
+      totalQuantity: item.totalQuantity,
+      remainingQuantity: item.totalQuantity, // Initially the remaining is equal to total
+    }));
 
-    if (!institution) {
-        throw new ApiError(404,'Institution not found.');
-    }
+    requirementData.foodItems = formattedFoodItems;
+  }
 
-    // If it's a monetary request
-    if (totalAmount) {
-        institution.requirements.totalAmount = totalAmount;
-        institution.requirements.remainingAmount = remainingAmount || totalAmount;
-    }
+  // Create a new requirement for the donation request
+  const newRequirement = new Requirement(requirementData);
+  await newRequirement.save();
 
-    // If it's a food request
-    if (foodItems && foodItems.length > 0) {
-        foodItems.forEach(item => {
-            // const existingItem = institution.requirements.foodItems.find(
-            //     (foodItem) => foodItem.itemName === item.itemName
-            // );
+  // Add the requirement reference to the institution's requirements array
+  institution.requirements.push(newRequirement._id);
+  await institution.save();
 
-        //     if (existingItem) {
-        //         // Update existing food item quantities
-        //         existingItem.totalQuantity = item.totalQuantity;
-        //         existingItem.remainingQuantity = item.remainingQuantity || item.totalQuantity;
-        //     } else {
-                // Add new food items
-                institution.requirements.foodItems.push({
-                    itemName: item.itemName,
-                    totalQuantity: item.totalQuantity,
-                    remainingQuantity: item.remainingQuantity || item.totalQuantity,
-                });
-            
-        });
-    }
-
-    // Save the updated institution requirements
-    await institution.save();
-    
-    // res.status(200).json({
-    //     message: 'Requirements successfully updated.',
-    //     requirements: institution.requirements,
-    // });
-
-    return res
-    .status(200)
+  return res
+    .status(201)
     .json(
-      new ApiResponse(200,institutionId, "Requirements Posted successfully ")
+      new ApiResponse(
+        201,
+        { newRequirement },
+        "Donation request created successfully",
+      ),
     );
 });

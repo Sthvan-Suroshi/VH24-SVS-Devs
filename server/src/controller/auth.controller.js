@@ -157,14 +157,11 @@ export const institutionSignup = asyncHandler(async (req, res) => {
     contactInfo,
   });
 
-  return res.status(201).json(
-    new ApiResponse(201, "Institution registered successfully", {
-      institution: {
-        id: newInstitution._id,
-        name: newInstitution.name,
-        email: newInstitution.email,
-        role: "institution",
-      },
-    }),
-  );
+  if (!newInstitution) {
+    throw new ApiError(400, "Failed to create institution");
+  }
+
+  return res
+    .status(201)
+    .json(new ApiResponse(201, {}, "Institution registered successfully"));
 });
