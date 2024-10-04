@@ -1,10 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { Routes, Route } from 'react-router-dom';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Home from './components/Home';
-import Registration from './pages/RegistrationForm';
-
+import Home from "./components/Home";
+import Registration from "./pages/RegistrationForm";
+import LoginComponent from "./components/Login";
 
 function App() {
   return (
@@ -12,15 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Registration />} />
-
-
-
-
-        
+        <Route path="/login" element={<LoginComponent />} />
       </Routes>
     </>
-
-    
   );
 }
 
