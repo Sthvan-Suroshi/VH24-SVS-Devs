@@ -33,6 +33,11 @@ const InstitutionSchema = new mongoose.Schema(
         required: true,
       },
     },
+    role: {
+      type: String,
+      default: "institution",
+      immutable: true,
+    },
     contactInfo: [
       {
         type: String,
@@ -43,7 +48,7 @@ const InstitutionSchema = new mongoose.Schema(
       {
         donorId: { type: mongoose.Schema.Types.ObjectId, ref: "Donor" }, // Reference to Donor
         shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shop" }, // Reference to Shop
-        donationType: { type: String, enum: ["food", "money"], required: true },
+        donationType: { type: String, enum: ["food", "money"] },
         amount: { type: Number }, // Amount if donation is money
         items: [{ type: String }], // Items if donation is food
         deliveryStatus: {
@@ -62,13 +67,13 @@ const InstitutionSchema = new mongoose.Schema(
       },
     ],
     requirements: {
-      totalAmount: { type: Number, required: true }, // Total monetary requirement
-      remainingAmount: { type: Number, required: true }, // Remaining monetary requirement
+      totalAmount: { type: Number }, // Total monetary requirement
+      remainingAmount: { type: Number }, // Remaining monetary requirement
       foodItems: [
         {
-          itemName: { type: String, required: true }, // Name of the food item
-          totalQuantity: { type: Number, required: true }, // Total required quantity
-          remainingQuantity: { type: Number, required: true }, // Remaining quantity
+          itemName: { type: String }, // Name of the food item
+          totalQuantity: { type: Number }, // Total required quantity
+          remainingQuantity: { type: Number }, // Remaining quantity
         },
       ],
     },

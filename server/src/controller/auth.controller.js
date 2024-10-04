@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Donor } from "../models/Donor.js";
-import { Institution } from "../models/Institution.js";
-import { Shopkeeper } from "../models/Shopkeeper.js";
+import { Donor } from "../models/donor.models.js";
+import { Institution } from "../models/institution.model.js";
+import { Shopkeeper } from "../models/shopkeeper.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -46,11 +46,9 @@ export const login = asyncHandler(async (req, res) => {
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY },
   );
 
-  // Set cookie options
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
   };
 
   return res
@@ -130,17 +128,9 @@ export const shopkeeperSignup = asyncHandler(async (req, res) => {
 });
 
 export const institutionSignup = asyncHandler(async (req, res) => {
-  const { name, email, password, address, contactInfo, requirements } =
-    req.body;
+  const { name, email, password, address, contactInfo } = req.body;
 
-  if (
-    !name ||
-    !email ||
-    !password ||
-    !address ||
-    !contactInfo ||
-    !requirements
-  ) {
+  if (!name || !email || !password || !address || !contactInfo) {
     throw new ApiError(
       400,
       "Please provide all required fields: name, email, password, address, contact info, and requirements",
@@ -161,7 +151,6 @@ export const institutionSignup = asyncHandler(async (req, res) => {
     password: hashedPassword,
     address,
     contactInfo,
-    requirements,
   });
 
   return res.status(201).json(
