@@ -19,9 +19,10 @@ app.use(cookieParser());
 //importing routes
 
 import authRoutes from "./routes/auth.routes.js";
-
+import institutionRoutes from "./routes/institution.routes.js";
 //routing
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/institution", institutionRoutes);
 
 export { app };

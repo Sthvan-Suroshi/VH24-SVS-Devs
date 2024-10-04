@@ -18,13 +18,13 @@ const DonorRegistrationForm = ({ onBack }) => {
 
   const onSubmit = async (data) => {
     console.log("Donor form submitted:", data);
-    const res = await dispatch(donorSignup(data));
-    console.log("res from donor", res);
+    // const res = await dispatch(donorSignup(data));
+    // console.log("res from donor", res);
 
     // if(res.type===)
   };
   return (
-    <div className="max-w-lg mx-auto mt-10 p-20 bg-white rounded-lg shadow-md">
+    <div className="max-w-lg mx-auto mt-6 p-10 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">
         Donor Registration
       </h2>

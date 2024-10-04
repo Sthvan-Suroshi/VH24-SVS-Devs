@@ -8,14 +8,17 @@ const initialState = {
   role: null,
 };
 
-export const login = createAsyncThunk("login", async ({ email, password }) => {
-  const response = await axiosInstance.post("/auth/login", {
-    email,
-    password,
-    role,
-  });
-  return response.data;
-});
+export const login = createAsyncThunk(
+  "login",
+  async ({ email, password, role }) => {
+    const response = await axiosInstance.post("/auth/login", {
+      email,
+      password,
+      role,
+    });
+    return response.data;
+  }
+);
 
 export const donorSignup = createAsyncThunk(
   "donnorSignup",
@@ -25,6 +28,58 @@ export const donorSignup = createAsyncThunk(
       email,
       password,
       address,
+    });
+    return response.data;
+  }
+);
+
+export const shopkeeperSignup = createAsyncThunk(
+  "shopkeeperSignup",
+  async ({
+    name,
+    shopName,
+    email,
+    password,
+    city,
+    state,
+    district,
+    pincode,
+  }) => {
+    const response = await axiosInstance.post("/auth/shopkeeper-signup", {
+      name,
+      shopName,
+      email,
+      password,
+      city,
+      state,
+      district,
+      pincode,
+    });
+    return response.data;
+  }
+);
+
+export const institutionSignup = createAsyncThunk(
+  "institutionSignup",
+  async ({
+    name,
+    email,
+    password,
+    city,
+    state,
+    district,
+    pincode,
+    contactInfo,
+  }) => {
+    const response = await axiosInstance.post("/auth/institution-signup", {
+      name,
+      email,
+      password,
+      city,
+      state,
+      district,
+      pincode,
+      contactInfo,
     });
     return response.data;
   }
@@ -66,8 +121,20 @@ export const authSlice = createSlice({
       .addCase(donorSignup.rejected, (state) => {
         state.loading = false;
       });
+
+    builder
+      .addCase(shopkeeperSignup.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(shopkeeperSignup.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(shopkeeperSignup.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 
 export const { logout } = authSlice.actions;
+
 export default authSlice.reducer;

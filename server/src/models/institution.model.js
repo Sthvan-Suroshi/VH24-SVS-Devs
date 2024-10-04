@@ -44,13 +44,14 @@ const InstitutionSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    // Track donations received by the institution
     donationsReceived: [
       {
         donorId: { type: mongoose.Schema.Types.ObjectId, ref: "Donor" }, // Reference to Donor
-        shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shop" }, // Reference to Shop
-        donationType: { type: String, enum: ["food", "money"] },
+        shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shopkeeper" }, // Reference to Shop
+        donationType: { type: String, enum: ["food", "money", "both"] },
         amount: { type: Number }, // Amount if donation is money
-        items: [{ type: String }], // Items if donation is food
+        items: [{ itemName: { type: String }, quantity: { type: Number } }], // Items if donation is food
         deliveryStatus: {
           type: String,
           enum: ["pending", "alloted", "received"],
@@ -59,63 +60,23 @@ const InstitutionSchema = new mongoose.Schema(
         receivedDate: { type: Date },
       },
     ],
+    // Feedback section for the shops
     feedbackToShop: [
       {
-        shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shop" }, // Reference to Shop
+        shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shopkeeper" }, // Reference to Shop
         feedback: { type: String },
         rating: { type: Number, min: 1, max: 5 },
       },
     ],
-    requirements: {
-      totalAmount: { type: Number }, // Total monetary requirement
-      remainingAmount: { type: Number }, // Remaining monetary requirement
-      foodItems: [
-        {
-          itemName: { type: String }, // Name of the food item
-          totalQuantity: { type: Number }, // Total required quantity
-          remainingQuantity: { type: Number }, // Remaining quantity
-        },
-      ],
-    },
-    notifications: [
+    // Reference to the Requirement schema to track requested donations
+    requirements: [
       {
-        message: { type: String },
-        read: { type: Boolean, default: false },
-        date: { type: Date, default: Date.now },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Requirement",
       },
     ],
   },
   { timestamps: true },
 );
-
-// Method to reduce monetary requirements
-InstitutionSchema.methods.reduceMonetaryRequirements = function (
-  donationAmount,
-) {
-  if (this.requirements.remainingAmount >= donationAmount) {
-    this.requirements.remainingAmount -= donationAmount;
-  } else {
-    throw new Error("Donation exceeds remaining monetary requirements.");
-  }
-};
-
-// Method to reduce food item requirements
-InstitutionSchema.methods.reduceFoodItemRequirements = function (
-  itemName,
-  quantity,
-) {
-  const foodItem = this.requirements.foodItems.find(
-    (item) => item.itemName === itemName,
-  );
-  if (foodItem) {
-    if (foodItem.remainingQuantity >= quantity) {
-      foodItem.remainingQuantity -= quantity;
-    } else {
-      throw new Error(`Donation exceeds remaining quantity for ${itemName}.`);
-    }
-  } else {
-    throw new Error(`Food item ${itemName} not found in requirements.`);
-  }
-};
 
 export const Institution = mongoose.model("Institution", InstitutionSchema);

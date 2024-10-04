@@ -22,9 +22,15 @@ const Registration = () => {
           </button>
           <button
             onClick={() => handleSelection("shopkeeper")}
-            className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 mb-4"
           >
             Shopkeeper
+          </button>
+          <button
+            onClick={() => handleSelection("institution")}
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 "
+          >
+            Institution
           </button>
         </div>
       ) : userType === "donor" ? (

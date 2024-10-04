@@ -36,9 +36,6 @@ const Home = () => {
           </span>
         </div>
         <nav className="ml-auto flex items-center gap-4">
-          <button className="py-2 px-4 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200">
-            Sign Up
-          </button>
           <div className="relative" ref={menuRef}>
             <button
               className="py-2 px-4 border  border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200"
@@ -83,7 +80,10 @@ const Home = () => {
               Join our community of donors, suppliers, and charitable institutes
               to make a lasting impact.
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg">
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg"
+              onClick={() => navigate("/signup")}
+            >
               Get Started
             </button>
           </div>
