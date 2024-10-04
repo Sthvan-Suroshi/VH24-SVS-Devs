@@ -37,6 +37,11 @@ const ShopkeeperSchema = new mongoose.Schema(
         required: true,
       },
     },
+    role: {
+      type: String,
+      default: "shopkeeper",
+      immutable: true,
+    },
     receivedDonations: [
       {
         donorId: { type: mongoose.Schema.Types.ObjectId, ref: "Donor" },
