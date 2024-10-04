@@ -60,7 +60,7 @@ const Home = () => {
         </nav>
       </header>
 
-      <main className="flex-grow flex items-center justify-center px-4 lg:px-[250px]">
+      <main className="flex-grow flex items-center justify-center px-4 lg:px-[120px]">
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {}
           <div className="text-center lg:text-left w-full px-5 ">
