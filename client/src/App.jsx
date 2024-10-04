@@ -1,10 +1,19 @@
-import React from "react";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Routes, Route } from 'react-router-dom';
+
+import Home from './components/Home';
 
 function App() {
   return (
-    <div className="flex justify-center items-center bg-red-300 h-screen">
-      App
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+      </Routes>
+    </>
+
+    
   );
 }
 
