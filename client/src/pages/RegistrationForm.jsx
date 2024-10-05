@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DonorRegistrationForm from "../components/DonorRegistrationForm";
 import ShopkeeperRegistrationForm from "../components/ShopkeeperRegistrationForm";
+import InstitutionRegistration from "../components/InstitutionRegistration";
 
 const Registration = () => {
   const [userType, setUserType] = useState("");
@@ -28,15 +29,17 @@ const Registration = () => {
           </button>
           <button
             onClick={() => handleSelection("institution")}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 "
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
             Institution
           </button>
         </div>
       ) : userType === "donor" ? (
         <DonorRegistrationForm onBack={() => setUserType("")} />
-      ) : (
+      ) : userType === "shopkeeper" ? (
         <ShopkeeperRegistrationForm onBack={() => setUserType("")} />
+      ) : (
+        <InstitutionRegistration onBack={() => setUserType("")} />
       )}
     </div>
   );
