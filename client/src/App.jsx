@@ -1,14 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
 import Home from "./components/Home";
 import Registration from "./pages/RegistrationForm";
 import Institution from "./components/institution";
 import Shopkeeper from "./components/shopkeeper";
-import Donor from "./components/donor";
 import Feedback from "./components/feedback";
 import LoginComponent from "./components/Login";
-import Institution from "./pages/institution";
 import Donor from "./pages/donor";
 import InstitutionDashboard from "./pages/institutiondashboard";
 import DonorsDashboard from "./pages/donordashboard";
@@ -29,7 +26,10 @@ function App() {
         <Route path="/shopkeeper" element={<Shopkeeper />} />
         <Route path="/donor" element={<Donor />} />
         <Route path="/feedback" element={<Feedback />} />
-        <Route path="/institutiondashboard" element={<InstitutionDashboard />} />
+        <Route
+          path="/institutiondashboard"
+          element={<InstitutionDashboard />}
+        />
         <Route path="/donordashboard" element={<DonorsDashboard />} />
         <Route path="/shopsdashboard" element={<ShopkeepersDashboard />} />
       </Routes>
