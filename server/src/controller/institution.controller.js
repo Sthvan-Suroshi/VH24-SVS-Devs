@@ -69,3 +69,31 @@ export const createDonationRequest = asyncHandler(async (req, res) => {
       ),
     );
 });
+
+export const getInstitutionsRequestingDonations = asyncHandler(
+  async (req, res) => {
+    // Find all institutions with non-empty 'requirements' array
+    const institutions = await Institution.find({
+      requirements: { $exists: true, $not: { $size: 0 } },
+    })
+      .populate({
+        path: "requirements",
+        select: "donationType amount items",
+      })
+      .exec();
+
+    if (!institutions || institutions.length === 0) {
+      return res.status(200).json(new ApiResponse(200, []));
+    }
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { institutions },
+          "Institutions found successfully",
+        ),
+      );
+  },
+);
