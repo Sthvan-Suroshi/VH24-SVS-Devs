@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Donor = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      institution: "Orphanage A",
-      amount: 1000,
-      items: ["Rice", "Beans"],
-      status: "Pending",
-    },
-    {
-      id: 2,
-      institution: "Elderly Home B",
-      amount: 1500,
-      items: ["Milk", "Bread"],
-      status: "Pending",
-    },
-  ]);
-
+  const [requests, setRequests] = useState([]);
   const [donation, setDonation] = useState({
     type: "both",
     money: "",
     items: {},
   });
+
+  // Fetch real data from the API when the component mounts
+  useEffect(() => {
+    const fetchInstitutions = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/v1/institution/get-institution");
+        const institutions = response.data.data.institutions;
+
+        // Transform the institution data into the required format for requests
+        const formattedRequests = institutions.map((institution) => ({
+          id: institution._id,
+          institution: institution.name,
+          amount: institution.requirements.length * 500, // Dummy calculation for amount
+          items: ["Rice", "Lentils"], // Set specific items here
+          status: "Pending",
+        }));
+
+        setRequests(formattedRequests);
+      } catch (error) {
+        console.error("Error fetching institutions:", error);
+      }
+    };
+
+    fetchInstitutions();
+  }, []);
 
   const handleStatusChange = (id, newStatus) => {
     setRequests(
@@ -42,7 +52,7 @@ const Donor = () => {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-extrabold text-center text-gray-900 mb-8">
-          Hey , Donate Here !
+          Donate Here!
         </h1>
         <div className="space-y-8">
           {requests.map((request) => (
@@ -178,10 +188,7 @@ const RequestCard = ({ request, onStatusChange, onDonationSubmit }) => {
                     Items
                   </label>
                   {request.items.map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center space-x-2 mb-2"
-                    >
+                    <div key={item} className="flex items-center space-x-2 mb-2">
                       <label
                         htmlFor={`${item}-${request.id}`}
                         className="text-sm text-gray-600 w-20"
@@ -220,3 +227,22 @@ const RequestCard = ({ request, onStatusChange, onDonationSubmit }) => {
 };
 
 export default Donor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
