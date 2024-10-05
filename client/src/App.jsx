@@ -27,11 +27,11 @@ function App() {
         <Route path="/donor" element={<Donor />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route
-          path="/institutiondashboard"
+          path="/institution-dashboard"
           element={<InstitutionDashboard />}
         />
-        <Route path="/donordashboard" element={<DonorsDashboard />} />
-        <Route path="/shopsdashboard" element={<ShopkeepersDashboard />} />
+        <Route path="/donor-dashboard" element={<DonorsDashboard />} />
+        <Route path="/shopkeeper-dashboard" element={<ShopkeepersDashboard />} />
       </Routes>
     </>
   );

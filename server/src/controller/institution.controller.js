@@ -70,22 +70,26 @@ export const createDonationRequest = asyncHandler(async (req, res) => {
     );
 });
 
+// Controller to get all institutions requesting donations with detailed requirements
 export const getInstitutionsRequestingDonations = asyncHandler(
   async (req, res) => {
-    // Find all institutions with non-empty 'requirements' array
+    // Find all institutions with non-empty 'requirements' array, excluding the password field
     const institutions = await Institution.find({
       requirements: { $exists: true, $not: { $size: 0 } },
     })
+      .select("-password") // Exclude the password field
       .populate({
-        path: "requirements",
-        select: "donationType amount items",
+        path: "requirements", // Populate the 'requirements' field
+        select: "donationType totalAmount remainingAmount foodItems -_id", // Exclude the _id field from requirements
       })
       .exec();
 
+    // If no institutions are found, return an empty array with status 200
     if (!institutions || institutions.length === 0) {
       return res.status(200).json(new ApiResponse(200, []));
     }
 
+    // Return the institutions found along with a success message
     return res
       .status(200)
       .json(

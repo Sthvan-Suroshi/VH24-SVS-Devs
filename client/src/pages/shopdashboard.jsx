@@ -1,20 +1,64 @@
-import React, { useState } from 'react';
-import { FaStore, FaSearch, FaBoxOpen } from 'react-icons/fa';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState } from "react";
+import { FaStore, FaSearch, FaBoxOpen } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 const ShopkeepersDashboard = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [showInventoryModal, setShowInventoryModal] = useState(false);
+
+  const navigate = useNavigate();
+
   const shopkeeperData = [
-    { id: 1, name: 'Shop A', itemsDistributed: 500, lastDistribution: '2023-05-02', location: 'Downtown' },
-    { id: 2, name: 'Shop B', itemsDistributed: 750, lastDistribution: '2023-05-04', location: 'Suburb' },
-    { id: 3, name: 'Shop C', itemsDistributed: 600, lastDistribution: '2023-05-06', location: 'City Center' },
-    { id: 4, name: 'Shop D', itemsDistributed: 400, lastDistribution: '2023-05-03', location: 'Industrial Area' },
-    { id: 5, name: 'Shop E', itemsDistributed: 550, lastDistribution: '2023-05-05', location: 'Residential Area' },
+    {
+      id: 1,
+      name: "Shop A",
+      itemsDistributed: 500,
+      lastDistribution: "2023-05-02",
+      location: "Downtown",
+    },
+    {
+      id: 2,
+      name: "Shop B",
+      itemsDistributed: 750,
+      lastDistribution: "2023-05-04",
+      location: "Suburb",
+    },
+    {
+      id: 3,
+      name: "Shop C",
+      itemsDistributed: 600,
+      lastDistribution: "2023-05-06",
+      location: "City Center",
+    },
+    {
+      id: 4,
+      name: "Shop D",
+      itemsDistributed: 400,
+      lastDistribution: "2023-05-03",
+      location: "Industrial Area",
+    },
+    {
+      id: 5,
+      name: "Shop E",
+      itemsDistributed: 550,
+      lastDistribution: "2023-05-05",
+      location: "Residential Area",
+    },
   ];
 
-  const filteredShopkeepers = shopkeeperData.filter(shop =>
-    shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    shop.location.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredShopkeepers = shopkeeperData.filter(
+    (shop) =>
+      shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      shop.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -25,7 +69,9 @@ const ShopkeepersDashboard = () => {
         </h1>
 
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Items Distributed by Shop</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            Items Distributed by Shop
+          </h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={shopkeeperData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -33,7 +79,11 @@ const ShopkeepersDashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="itemsDistributed" fill="#8884d8" name="Items Distributed" />
+              <Bar
+                dataKey="itemsDistributed"
+                fill="#8884d8"
+                name="Items Distributed"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -42,23 +92,14 @@ const ShopkeepersDashboard = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold">Shopkeeper List</h2>
             <button
-              onClick={() => setShowInventoryModal(true)}
+              onClick={() => navigate("/shopkeeper")}
               className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center"
             >
               <FaBoxOpen className="mr-2" /> Show Donation list
             </button>
           </div>
           <div className="mb-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search shopkeepers or locations..."
-                className="w-full px-4 py-2 border rounded-md pr-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <FaSearch className="absolute right-3 top-3 text-gray-400" />
-            </div>
+          
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -82,9 +123,15 @@ const ShopkeepersDashboard = () => {
                 {filteredShopkeepers.map((shop) => (
                   <tr key={shop.id} className="border-b">
                     <td className="px-6 py-4 whitespace-nowrap">{shop.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{shop.itemsDistributed}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{shop.lastDistribution}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{shop.location}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {shop.itemsDistributed}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {shop.lastDistribution}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {shop.location}
+                    </td>
                   </tr>
                 ))}
               </tbody>
