@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/slices/authSlice";
@@ -17,20 +17,22 @@ const LoginComponent = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const [loading, setLoading] = useState(false);
   const userType = localStorage.getItem("userType");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     data.role = userType;
-
+    setLoading(true);
     const res = await dispatch(login(data));
     console.log(res);
 
     if (res.type === "login/fulfilled") {
-      navigate("/donor-dashboard");
+      navigate(`/${userType}-dashboard`);
+      setLoading(false);
     }
+    setLoading(false);
   };
   return (
     <div className="flex justify-center items-center h-screen ">
@@ -98,7 +100,7 @@ const LoginComponent = () => {
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

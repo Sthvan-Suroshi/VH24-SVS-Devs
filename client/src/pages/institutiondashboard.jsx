@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
-import { FaChartBar, FaPlus, FaSearch } from 'react-icons/fa';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import React, { useState } from "react";
+import { FaChartBar, FaPlus, FaSearch } from "react-icons/fa";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const InstitutionDashboard = () => {
   const [showNewRequestModal, setShowNewRequestModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const institutionData = {
     totalFunds: 500000,
@@ -13,21 +27,21 @@ const InstitutionDashboard = () => {
   };
 
   const campaigns = [
-    { id: 1, name: 'COVID-19 Relief', goal: 100000, raised: 75000 },
-    { id: 2, name: 'Education for All', goal: 50000, raised: 30000 },
-    { id: 3, name: 'Clean Water Initiative', goal: 75000, raised: 45000 },
+    { id: 1, name: "COVID-19 Relief", goal: 100000, raised: 75000 },
+    { id: 2, name: "Education for All", goal: 50000, raised: 30000 },
+    { id: 3, name: "Clean Water Initiative", goal: 75000, raised: 45000 },
   ];
 
-  const filteredCampaigns = campaigns.filter(campaign =>
+  const filteredCampaigns = campaigns.filter((campaign) =>
     campaign.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const pieChartData = campaigns.map(campaign => ({
+  const pieChartData = campaigns.map((campaign) => ({
     name: campaign.name,
-    value: campaign.raised
+    value: campaign.raised,
   }));
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -39,15 +53,21 @@ const InstitutionDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">Total Funds Raised</h2>
-            <p className="text-3xl font-bold text-blue-600">₹{institutionData.totalFunds.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-blue-600">
+              ₹{institutionData.totalFunds.toLocaleString()}
+            </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">Active Campaigns</h2>
-            <p className="text-3xl font-bold text-green-600">{institutionData.activeCampaigns}</p>
+            <p className="text-3xl font-bold text-green-600">
+              {institutionData.activeCampaigns}
+            </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">Total Donors</h2>
-            <p className="text-3xl font-bold text-yellow-600">{institutionData.totalDonors}</p>
+            <p className="text-3xl font-bold text-yellow-600">
+              {institutionData.totalDonors}
+            </p>
           </div>
         </div>
 
@@ -78,10 +98,15 @@ const InstitutionDashboard = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
                 >
                   {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -94,24 +119,13 @@ const InstitutionDashboard = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold">Active Campaigns</h2>
             <button
-              onClick={() => setShowNewRequestModal(true)}
+              onClick={() => navigate("/institution")}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center"
             >
               <FaPlus className="mr-2" /> Create New Request
             </button>
           </div>
-          <div className="mb-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search campaigns..."
-                className="w-full px-4 py-2 border rounded-md pr-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <FaSearch className="absolute right-3 top-3 text-gray-400" />
-            </div>
-          </div>
+          <div className="mb-4"></div>
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
@@ -133,14 +147,24 @@ const InstitutionDashboard = () => {
               <tbody>
                 {filteredCampaigns.map((campaign) => (
                   <tr key={campaign.id} className="border-b">
-                    <td className="px-6 py-4 whitespace-nowrap">{campaign.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">₹{campaign.goal.toLocaleString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">₹{campaign.raised.toLocaleString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {campaign.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      ₹{campaign.goal.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      ₹{campaign.raised.toLocaleString()}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="w-full bg-gray-200 rounded-full h-2.5">
                         <div
                           className="bg-blue-600 h-2.5 rounded-full"
-                          style={{ width: `${(campaign.raised / campaign.goal) * 100}%` }}
+                          style={{
+                            width: `${
+                              (campaign.raised / campaign.goal) * 100
+                            }%`,
+                          }}
                         ></div>
                       </div>
                     </td>
